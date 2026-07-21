@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 import { SectionType } from './types';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -14,6 +14,14 @@ export default function App() {
   const [activeSection, setActiveSection] = useState<SectionType>('home');
   const [isEnrollOpen, setIsEnrollOpen] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined);
+  
+  // Custom scroll progress hook for stunning "Scroll Flash" graphic progress bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001
+  });
   
   // Custom Toast Notification State
   const [toast, setToast] = useState<{ show: boolean; studentName: string; courseName: string } | null>(null);
@@ -38,6 +46,13 @@ export default function App() {
 
   return (
     <div id="ucc-app-root" className="min-h-screen flex flex-col bg-slate-50 relative">
+      
+      {/* Dynamic top scroll-to-flash graphic progress bar */}
+      <motion.div 
+        id="scroll-to-flash-bar"
+        className="fixed top-0 left-0 right-0 h-[5px] bg-gradient-to-r from-cyan-500 via-teal-400 to-cyan-300 z-[9999] origin-left shadow-[0_0_12px_rgba(6,182,212,0.95)]"
+        style={{ scaleX }}
+      />
       
       {/* Dynamic Toast Feedback Overlay */}
       <AnimatePresence>

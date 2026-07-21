@@ -125,15 +125,40 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
 
           </div>
         </div>
+
+        {/* Dynamic down-scroll bouncing indicator with glow flash */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-1.5 cursor-pointer select-none z-20 animate-bounce-subtle">
+          <span className="text-[10px] font-bold tracking-widest text-cyan-400/80 uppercase">Scroll to Discover</span>
+          <div className="w-5 h-8 border border-slate-700/80 rounded-full flex justify-center p-1">
+            <motion.div 
+              className="w-1 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+            />
+          </div>
+        </div>
       </section>
 
       {/* 2. STATISTICS STRIP */}
-      <section id="stats-banner" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white border border-slate-200/60 p-6 rounded-2xl shadow-xl">
+      <motion.section 
+        id="stats-banner" 
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.65, ease: "easeOut" }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20"
+      >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-white border border-slate-200/60 p-6 rounded-2xl shadow-xl divide-x divide-slate-100 overflow-hidden relative group">
+          {/* Subtle scroll reflection glow sweep inside the stats container */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            <div className="absolute inset-0 w-[30%] h-full bg-gradient-to-r from-transparent via-cyan-400/5 to-transparent -skew-x-20 animate-sweep-flash" />
+          </div>
+          
           {STATS.map((stat, i) => (
-            <div key={i} id={`stat-${i}`} className="text-center p-4 space-y-1">
-              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 block tracking-tight">
+            <div key={i} id={`stat-${i}`} className="text-center p-4 space-y-1 relative z-10 hover:scale-105 transition-transform duration-300">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 block tracking-tight relative">
                 {stat.value}
+                <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping opacity-75" />
               </span>
               <span className="text-xs sm:text-sm text-slate-500 font-semibold block uppercase tracking-wider">
                 {stat.label}
@@ -141,7 +166,7 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
             </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* 3. FEATURED COURSES SECTION */}
       <section id="featured-courses" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -157,13 +182,22 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
 
         {/* Courses grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredCourses.map((course) => (
-            <div 
+          {featuredCourses.map((course, idx) => (
+            <motion.div 
               key={course.id} 
               id={`featured-${course.id}`}
-              className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between group"
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: idx * 0.1, ease: "easeOut" }}
+              className="bg-white rounded-2xl border border-slate-200/50 p-6 shadow-sm hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
             >
-              <div className="space-y-4">
+              {/* Amazing Scroll-to-Flash Shimmer Graphic */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl z-0">
+                <div className="absolute inset-0 w-[45%] h-full bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent -skew-x-20 translate-x-[-180%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-out" />
+              </div>
+
+              <div className="space-y-4 relative z-10">
                 <div className="flex justify-between items-start">
                   <div className="p-3 bg-cyan-500/5 text-cyan-600 rounded-xl border border-cyan-500/10 group-hover:bg-cyan-500 group-hover:text-white transition-colors duration-300">
                     <LucideIcon name={course.icon} size={22} />
@@ -196,7 +230,7 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
                 </div>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+              <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between relative z-10">
                 <div>
                   <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Scholarship Fee</p>
                   <p className="text-base font-black text-slate-900">{course.fee}</p>
@@ -210,7 +244,7 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
                   <LucideIcon name="ArrowRight" size={12} />
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -244,18 +278,27 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {USPS.map((usp) => (
-              <div 
+            {USPS.map((usp, idx) => (
+              <motion.div 
                 key={usp.id} 
                 id={`usp-card-${usp.id}`}
-                className="bg-slate-950/40 border border-slate-800/80 p-6 rounded-2xl hover:border-cyan-500/30 transition-all duration-300 hover:bg-slate-950/60"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1, ease: "easeOut" }}
+                className="bg-slate-950/40 border border-slate-800/80 p-6 rounded-2xl hover:border-cyan-500/30 transition-all duration-300 hover:bg-slate-950/60 relative overflow-hidden group"
               >
-                <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl w-fit border border-cyan-500/20 mb-5">
+                {/* Scroll/Hover Flash reflection line */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl z-0">
+                  <div className="absolute inset-0 w-[40%] h-full bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent -skew-x-20 translate-x-[-180%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-out" />
+                </div>
+
+                <div className="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl w-fit border border-cyan-500/20 mb-5 relative z-10">
                   <LucideIcon name={usp.icon} size={20} />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{usp.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">{usp.description}</p>
-              </div>
+                <h3 className="text-lg font-bold text-white mb-2 relative z-10">{usp.title}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed relative z-10">{usp.description}</p>
+              </motion.div>
             ))}
           </div>
 
@@ -263,7 +306,14 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
       </section>
 
       {/* 5. TESTIMONIALS SECTION */}
-      <section id="testimonials" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <motion.section 
+        id="testimonials" 
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.65, ease: "easeOut" }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      >
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
           <span className="text-xs font-bold uppercase tracking-widest text-cyan-600 block">ALUMNI SUCCESS</span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight">
@@ -335,7 +385,7 @@ export function HomeSection({ onSectionChange, onEnrollClick }: HomeSectionProps
             </button>
           </div>
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );
