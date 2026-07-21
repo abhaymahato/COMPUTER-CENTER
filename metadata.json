@@ -1,0 +1,6 @@
+{
+  "name": "Unique Computer Center",
+  "description": "A modern, professional website for Unique Computer Center - a computer education institute empowering students and professionals with cutting-edge tech skills.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
